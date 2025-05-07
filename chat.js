@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chat GGNET com Estilo Refinado e Animações Elegantes (Vermelho Forte)
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      2.1
 // @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante.
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
@@ -218,10 +218,33 @@
     icon.className = 'sidebar-icon';
     document.body.appendChild(icon);
 
-    // Containers separados para cada menu
+    // Mensagem inicial
+    const messageElem = document.createElement('div');
+    messageElem.className = 'chat-message chat';
+    const logo = document.createElement('div');
+    logo.className = 'logo';
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    messageContent.textContent = 'Olá! Como posso ajudar?';
+    messageElem.appendChild(logo);
+    messageElem.appendChild(messageContent);
+    chatBody.appendChild(messageElem);
+
+    // Botões de menu + containers
+    const manualToggle = document.createElement('div');
+    manualToggle.className = 'manual-toggle';
+    manualToggle.textContent = 'Informações do MANUAL GGNET';
+    chatBody.appendChild(manualToggle);
+
     const manualLinksContainer = document.createElement('div');
-    const resolucaoLinksContainer = document.createElement('div');
     chatBody.appendChild(manualLinksContainer);
+
+    const resolucaoToggle = document.createElement('div');
+    resolucaoToggle.className = 'manual-toggle';
+    resolucaoToggle.textContent = 'Resolução CSA';
+    chatBody.appendChild(resolucaoToggle);
+
+    const resolucaoLinksContainer = document.createElement('div');
     chatBody.appendChild(resolucaoLinksContainer);
 
     // Menu MANUAL GGNET
@@ -235,7 +258,7 @@
     ];
 
     let manualVisible = false;
-    function toggleManualLinks() {
+    manualToggle.addEventListener('click', () => {
         manualLinksContainer.innerHTML = '';
         if (!manualVisible) {
             manualLinks.forEach(link => {
@@ -249,7 +272,7 @@
         }
         manualVisible = !manualVisible;
         chatBody.scrollTop = chatBody.scrollHeight;
-    }
+    });
 
     // Menu RESOLUÇÃO CSA
     const resolucaoLinks = [
@@ -260,7 +283,7 @@
     ];
 
     let resolucaoVisible = false;
-    function toggleResolucaoLinks() {
+    resolucaoToggle.addEventListener('click', () => {
         resolucaoLinksContainer.innerHTML = '';
         if (!resolucaoVisible) {
             resolucaoLinks.forEach(link => {
@@ -274,42 +297,7 @@
         }
         resolucaoVisible = !resolucaoVisible;
         chatBody.scrollTop = chatBody.scrollHeight;
-    }
-
-    // Mensagem inicial + botões
-    setTimeout(() => {
-        addChatResponse('Olá! Como posso ajudar?', () => {
-            const manualToggle = document.createElement('div');
-            manualToggle.className = 'manual-toggle';
-            manualToggle.textContent = 'Informações do MANUAL GGNET';
-            manualToggle.addEventListener('click', toggleManualLinks);
-            chatBody.appendChild(manualToggle);
-
-            const resolucaoToggle = document.createElement('div');
-            resolucaoToggle.className = 'manual-toggle';
-            resolucaoToggle.textContent = 'Resolução CSA';
-            resolucaoToggle.addEventListener('click', toggleResolucaoLinks);
-            chatBody.appendChild(resolucaoToggle);
-        });
-    }, 1000);
-
-    function addChatResponse(text, callback) {
-        const messageElem = document.createElement('div');
-        messageElem.className = 'chat-message chat';
-
-        const logo = document.createElement('div');
-        logo.className = 'logo';
-        messageElem.appendChild(logo);
-
-        const messageContent = document.createElement('div');
-        messageContent.className = 'message-content';
-        messageContent.textContent = text;
-        messageElem.appendChild(messageContent);
-
-        chatBody.appendChild(messageElem);
-        if (callback) callback();
-        chatBody.scrollTop = chatBody.scrollHeight;
-    }
+    });
 
     function sendMessage() {
         const message = chatInput.value.trim();
