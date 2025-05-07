@@ -218,10 +218,10 @@
     const links = [
         { label: 'Easymesh Huawei + ONT', url: 'https://drive.google.com/file/d/1slPYt5G_yTakT5RAuLMLBWCvMqS-MuGD/view' },
         { label: 'VINCULAR ONU INT6', url: 'https://drive.google.com/file/d/1xP6hsMN5UuKYV2nPESatr3FfnGogoItu/view' },
-        { label: 'EG8145X6-10', url: 'https://drive.google.com/file/d/1ogs_KfoLWwqMi1Q_pEyBWfn_LAMf-QvN/view' },
-        { label: 'Firmwares DEBUG', url: 'https://sites.google.com/view/csawiki/firmwares/firmwares-debug?authuser=1' },
-        { label: 'Firmwares ONU UNM', url: 'https://drive.google.com/file/d/1DhKRW2RB6IQSlNfqHc7xCWpT8JRIK1Nv/view' },
-        { label: 'Firmwares para ONU Datacom', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
+        { label: 'EG8145X6-10 - Configuração Inicial', url: 'https://drive.google.com/file/d/1ogs_KfoLWwqMi1Q_pEyBWfn_LAMf-QvN/view' },
+        { label: 'Firmwares DEBUG AX2', url: 'https://sites.google.com/view/csawiki/firmwares/firmwares-debug?authuser=1' },
+        { label: 'Atualizar ONU FIBERHOME', url: 'https://drive.google.com/file/d/1DhKRW2RB6IQSlNfqHc7xCWpT8JRIK1Nv/view' },
+        { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
     ];
 
     function displayLinks() {
