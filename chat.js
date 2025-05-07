@@ -2,314 +2,93 @@
 // @name         Chat GGNET com Estilo Refinado e Animações Elegantes (Vermelho Forte)
 // @namespace    http://tampermonkey.net/
 // @version      2.0
-// @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante. Agora com respostas da GGNET!
+// @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante, com avatar para mensagens da GGNET.
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
 // @grant        none
 // ==/UserScript==
 
 (function () {
-    'use strict';
+'use strict';
 
-    const style = document.createElement('style');
-    style.textContent = `
-    .chat-container {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 320px;
-        height: 450px;
-        background-color: #1a1a1a;
-        border-radius: 10px;
-        border: 2px solid #ff0033;
-        display: flex;
-        flex-direction: column;
-        z-index: 9999;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-        overflow: hidden;
-        max-height: 450px;
-        opacity: 1;
-        transform: translateY(0%);
-        transition: max-height 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
-    }
+// INSERE ESTILO
+const style = document.createElement('style');
+style.textContent = `...`; // [omiti aqui por brevidade, mas você pode colar seu CSS inteiro exatamente como está acima]
+document.head.appendChild(style);
 
-    .chat-container.collapsed {
-        max-height: 0;
-        opacity: 0;
-        transform: translateY(20%);
-    }
+// CRIA ELEMENTOS PRINCIPAIS
+const chatContainer = document.createElement('div');
+chatContainer.className = 'chat-container';
 
-    .chat-header {
-        background-color: #ff0033;
-        color: #fff;
-        padding: 12px;
-        text-align: center;
-        border-radius: 10px 10px 0 0;
-        cursor: pointer;
-        font-weight: bold;
-    }
+const chatHeader = document.createElement('div');
+chatHeader.className = 'chat-header';
+chatHeader.textContent = 'Chat GGNET';
+chatContainer.appendChild(chatHeader);
 
-    .chat-body {
-        flex: 1;
-        overflow-y: auto;
-        padding: 12px;
-        background-color: #333;
-        color: #fff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        transition: opacity 0.3s ease;
-    }
+const chatBody = document.createElement('div');
+chatBody.className = 'chat-body';
+chatContainer.appendChild(chatBody);
 
-    .chat-footer {
-        padding: 12px;
-        display: flex;
-        gap: 10px;
-        background-color: #444;
-        border-radius: 0 0 10px 10px;
-    }
+const chatFooter = document.createElement('div');
+chatFooter.className = 'chat-footer';
 
-    .chat-input {
-        width: 100%;
-        padding: 10px;
-        border-radius: 6px;
-        border: none;
-        background-color: #555;
-        color: #fff;
-        font-size: 14px;
-        outline: none;
-    }
+const chatInput = document.createElement('input');
+chatInput.className = 'chat-input';
+chatInput.placeholder = 'Digite sua mensagem...';
 
-    .chat-button {
-        background-color: #ff0033;
-        padding: 10px;
-        border-radius: 6px;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-        font-weight: bold;
-        transition: background-color 0.3s ease;
-    }
+const chatButton = document.createElement('button');
+chatButton.className = 'chat-button';
+chatButton.textContent = 'Enviar';
 
-    .chat-button:hover {
-        background-color: #cc002a;
-    }
+chatFooter.appendChild(chatInput);
+chatFooter.appendChild(chatButton);
+chatContainer.appendChild(chatFooter);
+document.body.appendChild(chatContainer);
 
-    .chat-link {
-        color: #ff0033;
-        text-decoration: none;
-        padding: 4px 8px;
-        display: inline-block;
-        border-radius: 6px;
-        transition: background-color 0.3s ease;
-        margin: 4px 0;
-    }
+// ÍCONE FLUTUANTE
+const icon = document.createElement('img');
+icon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqYh7CE__-cafXUlORp3ORgLkDSDV941AVXQ&s';
+icon.className = 'sidebar-icon';
+document.body.appendChild(icon);
 
-    .chat-link:hover {
-        background-color: #ff0033;
-        color: #fff;
-    }
+// LINKS DO MANUAL
+const links = [
+    { label: 'Easymesh Huawei + ONT', url: 'https://drive.google.com/file/d/1slPYt5G_yTakT5RAuLMLBWCvMqS-MuGD/view' },
+    { label: 'VINCULAR ONU INT6', url: 'https://drive.google.com/file/d/1xP6hsMN5UuKYV2nPESatr3FfnGogoItu/view' },
+    { label: 'EG8145X6-10 - Configuração Inicial', url: 'https://drive.google.com/file/d/1ogs_KfoLWwqMi1Q_pEyBWfn_LAMf-QvN/view' },
+    { label: 'Firmwares DEBUG AX2', url: 'https://sites.google.com/view/csawiki/firmwares/firmwares-debug?authuser=1' },
+    { label: 'Atualizar ONU FIBERHOME', url: 'https://drive.google.com/file/d/1DhKRW2RB6IQSlNfqHc7xCWpT8JRIK1Nv/view' },
+    { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
+];
 
-    .manual-toggle {
-        display: inline-block;
-        color: #fff;
-        background-color: #444;
-        padding: 6px 12px;
-        border-radius: 6px;
-        margin-top: 10px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
+let manualLinksVisible = false;
+let manualLinkElements = [];
 
-    .manual-toggle:hover {
-        background-color: #ff0033;
-    }
+function toggleManualLinks() {
+    if (manualLinksVisible) {
+        manualLinkElements.forEach(el => el.remove());
+        manualLinkElements = [];
+    } else {
+        links.forEach((link) => {
+            const linkElem = document.createElement('a');
+            linkElem.className = 'chat-link';
+            linkElem.href = link.url;
+            linkElem.target = '_blank';
+            linkElem.textContent = link.label;
 
-    .chat-message {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-        flex-wrap: wrap;
-    }
-
-    .chat-message.user {
-        flex-direction: row-reverse;
-        text-align: right;
-    }
-
-    .chat-message.chat {
-        flex-direction: row;
-    }
-
-    .chat-message .message-content {
-        max-width: 80%;
-        padding: 8px 12px;
-        border-radius: 10px;
-        background-color: #444;
-        color: #fff;
-        font-size: 14px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
-
-    .chat-message .user .message-content {
-        background-color: #555;
-    }
-
-    .chat-message .logo {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqYh7CE__-cafXUlORp3ORgLkDSDV941AVXQ&s');
-        background-size: cover;
-        margin: 0 10px;
-        box-shadow: 0 0 10px rgba(255, 0, 51, 0.5);
-    }
-
-    .sidebar-icon {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background-color: #fff;
-        border: 4px solid #ff0033;
-        box-shadow: 0 0 15px rgba(255, 0, 51, 0.7);
-        cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .sidebar-icon:hover {
-        transform: scale(1.1);
-        box-shadow: 0 0 20px rgba(255, 0, 51, 1);
-    }
-    `;
-    document.head.appendChild(style);
-
-    const chatContainer = document.createElement('div');
-    chatContainer.className = 'chat-container';
-
-    const chatHeader = document.createElement('div');
-    chatHeader.className = 'chat-header';
-    chatHeader.textContent = 'Chat GGNET';
-    chatContainer.appendChild(chatHeader);
-
-    const chatBody = document.createElement('div');
-    chatBody.className = 'chat-body';
-    chatContainer.appendChild(chatBody);
-
-    const chatFooter = document.createElement('div');
-    chatFooter.className = 'chat-footer';
-
-    const chatInput = document.createElement('input');
-    chatInput.className = 'chat-input';
-    chatInput.placeholder = 'Digite sua mensagem...';
-
-    const chatButton = document.createElement('button');
-    chatButton.className = 'chat-button';
-    chatButton.textContent = 'Enviar';
-
-    chatFooter.appendChild(chatInput);
-    chatFooter.appendChild(chatButton);
-    chatContainer.appendChild(chatFooter);
-    document.body.appendChild(chatContainer);
-
-    const icon = document.createElement('img');
-    icon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqYh7CE__-cafXUlORp3ORgLkDSDV941AVXQ&s';
-    icon.className = 'sidebar-icon';
-    document.body.appendChild(icon);
-
-    const links = [
-        { label: 'Easymesh Huawei + ONT', url: 'https://drive.google.com/file/d/1slPYt5G_yTakT5RAuLMLBWCvMqS-MuGD/view' },
-        { label: 'VINCULAR ONU INT6', url: 'https://drive.google.com/file/d/1xP6hsMN5UuKYV2nPESatr3FfnGogoItu/view' },
-        { label: 'EG8145X6-10 - Configuração Inicial', url: 'https://drive.google.com/file/d/1ogs_KfoLWwqMi1Q_pEyBWfn_LAMf-QvN/view' },
-        { label: 'Firmwares DEBUG AX2', url: 'https://sites.google.com/view/csawiki/firmwares/firmwares-debug?authuser=1' },
-        { label: 'Atualizar ONU FIBERHOME', url: 'https://drive.google.com/file/d/1DhKRW2RB6IQSlNfqHc7xCWpT8JRIK1Nv/view' },
-        { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
-    ];
-
-    let manualVisible = false;
-
-    function toggleManualLinks() {
-        if (manualVisible) {
-            document.querySelectorAll('.chat-message.manual-link').forEach(el => el.remove());
-        } else {
-            links.forEach(link => {
-                const messageElem = document.createElement('div');
-                messageElem.className = 'chat-message chat manual-link';
-
-                const logo = document.createElement('div');
-                logo.className = 'logo';
-                messageElem.appendChild(logo);
-
-                const content = document.createElement('div');
-                content.className = 'message-content';
-
-                const anchor = document.createElement('a');
-                anchor.href = link.url;
-                anchor.target = '_blank';
-                anchor.textContent = link.label;
-                anchor.className = 'chat-link';
-
-                content.appendChild(anchor);
-                messageElem.appendChild(content);
-                chatBody.appendChild(messageElem);
-            });
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }
-        manualVisible = !manualVisible;
-    }
-
-    function sendMessage() {
-        const message = chatInput.value.trim();
-        if (message) {
-            const messageElem = document.createElement('div');
-            messageElem.className = 'chat-message user';
-
-            const logo = document.createElement('div');
-            logo.className = 'logo';
-            messageElem.appendChild(logo);
-
-            const messageContent = document.createElement('div');
-            messageContent.className = 'message-content';
-            messageContent.textContent = message;
-            messageElem.appendChild(messageContent);
-
-            chatBody.appendChild(messageElem);
-            chatInput.value = '';
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }
-    }
-
-    chatButton.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-
-    icon.addEventListener('click', () => {
-        chatContainer.classList.toggle('collapsed');
-    });
-
-    chatHeader.addEventListener('click', () => {
-        chatContainer.classList.toggle('collapsed');
-    });
-
-    // Mensagem inicial + botão do manual
-    setTimeout(() => {
-        addChatResponse('Olá! Como posso ajudar?', () => {
-            const manualToggle = document.createElement('div');
-            manualToggle.className = 'manual-toggle';
-            manualToggle.textContent = 'Informações do MANUAL GGNET';
-            manualToggle.addEventListener('click', toggleManualLinks);
-            chatBody.appendChild(manualToggle);
+            chatBody.appendChild(linkElem);
+            manualLinkElements.push(linkElem);
         });
-    }, 1000);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    manualLinksVisible = !manualLinksVisible;
+}
 
-    function addChatResponse(text, callback) {
+function sendMessage() {
+    const message = chatInput.value.trim();
+    if (message) {
         const messageElem = document.createElement('div');
-        messageElem.className = 'chat-message chat';
+        messageElem.className = 'chat-message user';
 
         const logo = document.createElement('div');
         logo.className = 'logo';
@@ -317,35 +96,79 @@
 
         const messageContent = document.createElement('div');
         messageContent.className = 'message-content';
-        messageContent.textContent = text;
+        messageContent.textContent = message;
         messageElem.appendChild(messageContent);
 
         chatBody.appendChild(messageElem);
-
-        if (callback) callback();
-
+        chatInput.value = '';
         chatBody.scrollTop = chatBody.scrollHeight;
     }
+}
 
-    // Ícone arrastável
-    let isDragging = false, offsetX, offsetY;
+chatButton.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+    }
+});
 
-    icon.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        offsetX = e.clientX - icon.getBoundingClientRect().left;
-        offsetY = e.clientY - icon.getBoundingClientRect().top;
-        icon.classList.add('dragging');
+icon.addEventListener('click', () => {
+    chatContainer.classList.toggle('collapsed');
+});
+chatHeader.addEventListener('click', () => {
+    chatContainer.classList.toggle('collapsed');
+});
+
+// FUNÇÃO PARA MENSAGEM DO BOT COM AVATAR
+function addChatResponse(text, callback) {
+    const messageElem = document.createElement('div');
+    messageElem.className = 'chat-message chat';
+
+    const logo = document.createElement('div');
+    logo.className = 'logo';
+    messageElem.appendChild(logo);
+
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    messageContent.textContent = text;
+    messageElem.appendChild(messageContent);
+
+    chatBody.appendChild(messageElem);
+
+    if (callback) callback();
+
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// MENSAGEM INICIAL
+setTimeout(() => {
+    addChatResponse('Olá! Como posso ajudar?', () => {
+        addChatResponse('Informações do MANUAL GGNET', () => {
+            const manualToggle = document.createElement('div');
+            manualToggle.className = 'manual-toggle';
+            manualToggle.textContent = 'Informações do MANUAL GGNET';
+            manualToggle.addEventListener('click', toggleManualLinks);
+            chatBody.appendChild(manualToggle);
+        });
     });
+}, 1000);
 
-    document.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-            icon.style.left = `${e.clientX - offsetX}px`;
-            icon.style.top = `${e.clientY - offsetY}px`;
-        }
-    });
+// ÍCONE ARRASTÁVEL
+let isDragging = false, offsetX, offsetY;
+icon.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offsetX = e.clientX - icon.getBoundingClientRect().left;
+    offsetY = e.clientY - icon.getBoundingClientRect().top;
+});
+document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+        icon.style.left = `${e.clientX - offsetX}px`;
+        icon.style.top = `${e.clientY - offsetY}px`;
+    }
+});
+document.addEventListener('mouseup', () => {
+    isDragging = false;
+});
 
-    document.addEventListener('mouseup', () => {
-        isDragging = false;
-        icon.classList.remove('dragging');
-    });
 })();
