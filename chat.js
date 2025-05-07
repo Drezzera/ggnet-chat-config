@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chat GGNET com Estilo Refinado e Animações Elegantes (Vermelho Forte)
 // @namespace    http://tampermonkey.net/
-// @version      1.9
+// @version      2.0
 // @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante.
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
@@ -218,7 +218,14 @@
     icon.className = 'sidebar-icon';
     document.body.appendChild(icon);
 
-    const linksManual = [
+    // Containers separados para cada menu
+    const manualLinksContainer = document.createElement('div');
+    const resolucaoLinksContainer = document.createElement('div');
+    chatBody.appendChild(manualLinksContainer);
+    chatBody.appendChild(resolucaoLinksContainer);
+
+    // Menu MANUAL GGNET
+    const manualLinks = [
         { label: 'Easymesh Huawei + ONT', url: 'https://drive.google.com/file/d/1slPYt5G_yTakT5RAuLMLBWCvMqS-MuGD/view' },
         { label: 'VINCULAR ONU INT6', url: 'https://drive.google.com/file/d/1xP6hsMN5UuKYV2nPESatr3FfnGogoItu/view' },
         { label: 'EG8145X6-10 - Configuração Inicial', url: 'https://drive.google.com/file/d/1ogs_KfoLWwqMi1Q_pEyBWfn_LAMf-QvN/view' },
@@ -227,57 +234,81 @@
         { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
     ];
 
-    const linksCSA = [
+    let manualVisible = false;
+    function toggleManualLinks() {
+        manualLinksContainer.innerHTML = '';
+        if (!manualVisible) {
+            manualLinks.forEach(link => {
+                const a = document.createElement('a');
+                a.className = 'chat-link';
+                a.href = link.url;
+                a.target = '_blank';
+                a.textContent = link.label;
+                manualLinksContainer.appendChild(a);
+            });
+        }
+        manualVisible = !manualVisible;
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // Menu RESOLUÇÃO CSA
+    const resolucaoLinks = [
         { label: 'Sem acesso', url: '#' },
         { label: 'Lentidão', url: '#' },
         { label: 'Sinal Alto', url: '#' },
         { label: 'Dificuldade com sites específicos', url: '#' }
     ];
 
-    let manualLinksVisible = false;
-    let manualLinkElements = [];
-
-    let csaLinksVisible = false;
-    let csaLinkElements = [];
-
-    function toggleManualLinks() {
-        if (manualLinksVisible) {
-            manualLinkElements.forEach(el => el.remove());
-            manualLinkElements = [];
-        } else {
-            linksManual.forEach((link) => {
-                const linkElem = document.createElement('a');
-                linkElem.className = 'chat-link';
-                linkElem.href = link.url;
-                linkElem.target = '_blank';
-                linkElem.textContent = link.label;
-
-                chatBody.appendChild(linkElem);
-                manualLinkElements.push(linkElem);
+    let resolucaoVisible = false;
+    function toggleResolucaoLinks() {
+        resolucaoLinksContainer.innerHTML = '';
+        if (!resolucaoVisible) {
+            resolucaoLinks.forEach(link => {
+                const a = document.createElement('a');
+                a.className = 'chat-link';
+                a.href = link.url;
+                a.target = '_blank';
+                a.textContent = link.label;
+                resolucaoLinksContainer.appendChild(a);
             });
-            chatBody.scrollTop = chatBody.scrollHeight;
         }
-        manualLinksVisible = !manualLinksVisible;
+        resolucaoVisible = !resolucaoVisible;
+        chatBody.scrollTop = chatBody.scrollHeight;
     }
 
-    function toggleCSALinks() {
-        if (csaLinksVisible) {
-            csaLinkElements.forEach(el => el.remove());
-            csaLinkElements = [];
-        } else {
-            linksCSA.forEach((link) => {
-                const linkElem = document.createElement('a');
-                linkElem.className = 'chat-link';
-                linkElem.href = link.url;
-                linkElem.target = '_blank';
-                linkElem.textContent = link.label;
+    // Mensagem inicial + botões
+    setTimeout(() => {
+        addChatResponse('Olá! Como posso ajudar?', () => {
+            const manualToggle = document.createElement('div');
+            manualToggle.className = 'manual-toggle';
+            manualToggle.textContent = 'Informações do MANUAL GGNET';
+            manualToggle.addEventListener('click', toggleManualLinks);
+            chatBody.appendChild(manualToggle);
 
-                chatBody.appendChild(linkElem);
-                csaLinkElements.push(linkElem);
-            });
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }
-        csaLinksVisible = !csaLinksVisible;
+            const resolucaoToggle = document.createElement('div');
+            resolucaoToggle.className = 'manual-toggle';
+            resolucaoToggle.textContent = 'Resolução CSA';
+            resolucaoToggle.addEventListener('click', toggleResolucaoLinks);
+            chatBody.appendChild(resolucaoToggle);
+        });
+    }, 1000);
+
+    function addChatResponse(text, callback) {
+        const messageElem = document.createElement('div');
+        messageElem.className = 'chat-message chat';
+
+        const logo = document.createElement('div');
+        logo.className = 'logo';
+        messageElem.appendChild(logo);
+
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        messageContent.textContent = text;
+        messageElem.appendChild(messageContent);
+
+        chatBody.appendChild(messageElem);
+        if (callback) callback();
+        chatBody.scrollTop = chatBody.scrollHeight;
     }
 
     function sendMessage() {
@@ -317,46 +348,8 @@
         chatContainer.classList.toggle('collapsed');
     });
 
-    // Mensagem inicial + botões de menu
-    setTimeout(() => {
-        addChatResponse('Olá! Como posso ajudar?', () => {
-            const manualToggle = document.createElement('div');
-            manualToggle.className = 'manual-toggle';
-            manualToggle.textContent = 'Informações do MANUAL GGNET';
-            manualToggle.addEventListener('click', toggleManualLinks);
-            chatBody.appendChild(manualToggle);
-
-            const csaToggle = document.createElement('div');
-            csaToggle.className = 'manual-toggle';
-            csaToggle.textContent = 'Resolução CSA';
-            csaToggle.addEventListener('click', toggleCSALinks);
-            chatBody.appendChild(csaToggle);
-        });
-    }, 1000);
-
-    function addChatResponse(text, callback) {
-        const messageElem = document.createElement('div');
-        messageElem.className = 'chat-message chat';
-
-        const logo = document.createElement('div');
-        logo.className = 'logo';
-        messageElem.appendChild(logo);
-
-        const messageContent = document.createElement('div');
-        messageContent.className = 'message-content';
-        messageContent.textContent = text;
-        messageElem.appendChild(messageContent);
-
-        chatBody.appendChild(messageElem);
-
-        if (callback) callback();
-
-        chatBody.scrollTop = chatBody.scrollHeight;
-    }
-
     // Ícone arrastável
     let isDragging = false, offsetX, offsetY;
-
     icon.addEventListener('mousedown', (e) => {
         isDragging = true;
         offsetX = e.clientX - icon.getBoundingClientRect().left;
