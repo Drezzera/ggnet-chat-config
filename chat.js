@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chat GGNET com Estilo Refinado e Animações Elegantes (Vermelho Forte)
 // @namespace    http://tampermonkey.net/
-// @version      1.8
+// @version      1.7
 // @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante.
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
@@ -228,33 +228,25 @@
         { label: 'EG8145X6-10 - Configuração Inicial', url: 'https://drive.google.com/file/d/1ogs_KfoLWwqMi1Q_pEyBWfn_LAMf-QvN/view' },
         { label: 'Firmwares DEBUG AX2', url: 'https://sites.google.com/view/csawiki/firmwares/firmwares-debug?authuser=1' },
         { label: 'Atualizar ONU FIBERHOME', url: 'https://drive.google.com/file/d/1DhKRW2RB6IQSlNfqHc7xCWpT8JRIK1Nv/view' },
-        { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
+        { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' },
+        { label: 'Motivos Abertura e Fechamento', url: 'https://drive.google.com/file/d/1mZAHwQngyaCL8YBfL4-FLo3zJzVZD2cS/view' }
     ];
-
-    const ajudaLinks = [
-        { label: 'Motivos Abertura e Fechamento', url: 'https://drive.google.com/file/d/1mZAHwQngyaCL8YBfL4-FLo3zJzVZD2cS/view' },
-        { label: 'Manual do Técnico GGNET', url: 'https://example.com/manual-tecnico' },
-        { label: 'Teste de Velocidade', url: 'https://fast.com/' }
-    ];
-
-    function createLinkElement(link, delay = 0) {
-        const linkElem = document.createElement('a');
-        linkElem.className = 'chat-link';
-        linkElem.href = link.url;
-        linkElem.target = '_blank';
-        linkElem.textContent = link.label;
-
-        setTimeout(() => {
-            chatBody.appendChild(linkElem);
-        }, delay);
-    }
 
     function displayLinks() {
-        links.forEach((link, index) => createLinkElement(link, index * 300));
-    }
+        setTimeout(() => {
+            links.forEach((link, index) => {
+                const linkElem = document.createElement('a');
+                linkElem.className = 'chat-link';
+                linkElem.href = link.url;
+                linkElem.target = '_blank';
+                linkElem.textContent = link.label;
+                chatBody.appendChild(linkElem);
 
-    function displayAjudaLinks() {
-        ajudaLinks.forEach((link, index) => createLinkElement(link, index * 300));
+                setTimeout(() => {
+                    linkElem.classList.add('visible');
+                }, index * 300);
+            });
+        }, 1000);
     }
 
     function toggleChat() {
@@ -286,14 +278,6 @@
             setTimeout(() => {
                 messageElem.classList.add('visible');
             }, 100);
-
-            // Comando especial
-            if (message.toLowerCase() === '/ajuda') {
-                setTimeout(() => {
-                    addChatResponse('Aqui estão mais algumas informações que podem te ajudar:');
-                    displayAjudaLinks();
-                }, 500);
-            }
         }
     }
 
@@ -302,6 +286,64 @@
         if (e.key === 'Enter') {
             e.preventDefault();
             sendMessage();
+        }
+    });
+
+    function addChatResponse(responseText) {
+        const messageElem = document.createElement('div');
+        messageElem.className = 'chat-message chat';
+
+        const logo = document.createElement('div');
+        logo.className = 'logo';
+        messageElem.appendChild(logo);
+
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        messageContent.textContent = responseText;
+        messageElem.appendChild(messageContent);
+
+        chatBody.appendChild(messageElem);
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        setTimeout(() => {
+            messageElem.classList.add('visible');
+        }, 100);
+    }
+
+    setTimeout(() => {
+        addChatResponse('Olá! Como posso ajudar?');
+        displayLinks();
+    }, 2000);
+
+    // Ícone flutuante arrastável
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    icon.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - icon.getBoundingClientRect().left;
+        offsetY = e.clientY - icon.getBoundingClientRect().top;
+        icon.classList.add('dragging');
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            icon.style.left = `${e.clientX - offsetX}px`;
+            icon.style.top = `${e.clientY - offsetY}px`;
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        icon.classList.remove('dragging');
+    });
+
+    // Comando /ajuda
+    chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && chatInput.value.trim().toLowerCase() === '/ajuda') {
+            e.preventDefault();
+            addChatResponse('Aqui estão mais algumas informações que podem te ajudar:');
+            setTimeout(displayLinks, 500);
         }
     });
 })();
