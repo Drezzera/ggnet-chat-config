@@ -218,7 +218,7 @@
     icon.className = 'sidebar-icon';
     document.body.appendChild(icon);
 
-    const links = [
+    const linksManual = [
         { label: 'Easymesh Huawei + ONT', url: 'https://drive.google.com/file/d/1slPYt5G_yTakT5RAuLMLBWCvMqS-MuGD/view' },
         { label: 'VINCULAR ONU INT6', url: 'https://drive.google.com/file/d/1xP6hsMN5UuKYV2nPESatr3FfnGogoItu/view' },
         { label: 'EG8145X6-10 - Configuração Inicial', url: 'https://drive.google.com/file/d/1ogs_KfoLWwqMi1Q_pEyBWfn_LAMf-QvN/view' },
@@ -227,15 +227,25 @@
         { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
     ];
 
+    const linksCSA = [
+        { label: 'Sem acesso', url: '#' },
+        { label: 'Lentidão', url: '#' },
+        { label: 'Sinal Alto', url: '#' },
+        { label: 'Dificuldade com sites específicos', url: '#' }
+    ];
+
     let manualLinksVisible = false;
     let manualLinkElements = [];
+
+    let csaLinksVisible = false;
+    let csaLinkElements = [];
 
     function toggleManualLinks() {
         if (manualLinksVisible) {
             manualLinkElements.forEach(el => el.remove());
             manualLinkElements = [];
         } else {
-            links.forEach((link) => {
+            linksManual.forEach((link) => {
                 const linkElem = document.createElement('a');
                 linkElem.className = 'chat-link';
                 linkElem.href = link.url;
@@ -248,6 +258,26 @@
             chatBody.scrollTop = chatBody.scrollHeight;
         }
         manualLinksVisible = !manualLinksVisible;
+    }
+
+    function toggleCSALinks() {
+        if (csaLinksVisible) {
+            csaLinkElements.forEach(el => el.remove());
+            csaLinkElements = [];
+        } else {
+            linksCSA.forEach((link) => {
+                const linkElem = document.createElement('a');
+                linkElem.className = 'chat-link';
+                linkElem.href = link.url;
+                linkElem.target = '_blank';
+                linkElem.textContent = link.label;
+
+                chatBody.appendChild(linkElem);
+                csaLinkElements.push(linkElem);
+            });
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        csaLinksVisible = !csaLinksVisible;
     }
 
     function sendMessage() {
@@ -287,7 +317,7 @@
         chatContainer.classList.toggle('collapsed');
     });
 
-    // Mensagem inicial + botão do manual
+    // Mensagem inicial + botões de menu
     setTimeout(() => {
         addChatResponse('Olá! Como posso ajudar?', () => {
             const manualToggle = document.createElement('div');
@@ -295,6 +325,12 @@
             manualToggle.textContent = 'Informações do MANUAL GGNET';
             manualToggle.addEventListener('click', toggleManualLinks);
             chatBody.appendChild(manualToggle);
+
+            const csaToggle = document.createElement('div');
+            csaToggle.className = 'manual-toggle';
+            csaToggle.textContent = 'Resolução CSA';
+            csaToggle.addEventListener('click', toggleCSALinks);
+            chatBody.appendChild(csaToggle);
         });
     }, 1000);
 
