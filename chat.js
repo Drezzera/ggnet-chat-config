@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chat GGNET com Estilo Refinado e Animações Elegantes (Vermelho Forte)
 // @namespace    http://tampermonkey.net/
-// @version      1.8
+// @version      1.9
 // @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante.
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
@@ -93,22 +93,35 @@
         background-color: #cc002a;
     }
 
-    .chat-link, .manual-toggle {
-        display: inline-block;
-        position: relative;
+    .chat-link {
         color: #ff0033;
         text-decoration: none;
-        padding: 6px 12px;
-        border-radius: 8px;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-        background-color: transparent;
-        cursor: pointer;
-        margin-bottom: 6px;
+        padding: 4px 8px;
+        display: inline-block;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+        margin: 4px 0;
     }
 
-    .chat-link:hover, .manual-toggle:hover {
+    .chat-link:hover {
         background-color: #ff0033;
         color: #fff;
+    }
+
+    .manual-toggle {
+        display: inline-block;
+        color: #fff;
+        background-color: #444;
+        padding: 6px 12px;
+        border-radius: 6px;
+        margin-top: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .manual-toggle:hover {
+        background-color: #ff0033;
     }
 
     .chat-message {
@@ -135,10 +148,6 @@
         color: #fff;
         font-size: 14px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
-
-    .chat-message .chat .message-content {
-        background-color: #ff0033;
     }
 
     .chat-message .user .message-content {
@@ -233,18 +242,8 @@
                 linkElem.target = '_blank';
                 linkElem.textContent = link.label;
 
-                const container = document.createElement('div');
-                container.className = 'chat-message chat';
-                const logo = document.createElement('div');
-                logo.className = 'logo';
-                const content = document.createElement('div');
-                content.className = 'message-content';
-                content.appendChild(linkElem);
-                container.appendChild(logo);
-                container.appendChild(content);
-
-                chatBody.appendChild(container);
-                manualLinkElements.push(container);
+                chatBody.appendChild(linkElem);
+                manualLinkElements.push(linkElem);
             });
             chatBody.scrollTop = chatBody.scrollHeight;
         }
