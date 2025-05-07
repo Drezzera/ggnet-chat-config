@@ -228,8 +228,7 @@
         { label: 'EG8145X6-10 - Configuração Inicial', url: 'https://drive.google.com/file/d/1ogs_KfoLWwqMi1Q_pEyBWfn_LAMf-QvN/view' },
         { label: 'Firmwares DEBUG AX2', url: 'https://sites.google.com/view/csawiki/firmwares/firmwares-debug?authuser=1' },
         { label: 'Atualizar ONU FIBERHOME', url: 'https://drive.google.com/file/d/1DhKRW2RB6IQSlNfqHc7xCWpT8JRIK1Nv/view' },
-        { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' },
-        { label: 'Motivos Abertura e Fechamento', url: 'https://drive.google.com/file/d/1mZAHwQngyaCL8YBfL4-FLo3zJzVZD2cS/view' }
+        { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
     ];
 
     function displayLinks() {
@@ -310,9 +309,26 @@
         }, 100);
     }
 
+    // Adicionando a label "Informações do MANUAL GGNET"
+    function addManualInfoLabel() {
+        const label = document.createElement('a');
+        label.className = 'chat-link';
+        label.textContent = 'Informações do MANUAL GGNET';
+        label.href = '#';
+        label.addEventListener('click', () => {
+            displayLinks();
+        });
+
+        chatBody.appendChild(label);
+
+        setTimeout(() => {
+            label.classList.add('visible');
+        }, 100);
+    }
+
     setTimeout(() => {
         addChatResponse('Olá! Como posso ajudar?');
-        displayLinks();
+        addManualInfoLabel(); // Adiciona a label "Informações do MANUAL GGNET"
     }, 2000);
 
     // Ícone flutuante arrastável
@@ -336,14 +352,5 @@
     document.addEventListener('mouseup', () => {
         isDragging = false;
         icon.classList.remove('dragging');
-    });
-
-    // Comando /ajuda
-    chatInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && chatInput.value.trim().toLowerCase() === '/ajuda') {
-            e.preventDefault();
-            addChatResponse('Aqui estão mais algumas informações que podem te ajudar:');
-            setTimeout(displayLinks, 500);
-        }
     });
 })();
