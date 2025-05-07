@@ -6,7 +6,7 @@
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
 // @grant        none
-// ==/UserScript==
+// ==/UserScript== 
 
 (function () {
     'use strict';
