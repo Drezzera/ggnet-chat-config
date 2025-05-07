@@ -278,7 +278,7 @@
     const resolucaoLinks = [
         { label: 'Sem acesso', url: 'https://docs.google.com/document/d/1xERq2elAMS5-wlgXt6SIGGuqRkG36D0h9cWSQ65mkco/edit?tab=t.0' },
         { label: 'Lentidão', url: '#' },
-        { label: 'Sinal Alto', url: '#' },
+        { label: 'Teste', url: '#' },
         { label: 'Dificuldade com sites específicos', url: '#' }
     ];
 
