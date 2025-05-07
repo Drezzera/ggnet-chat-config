@@ -93,7 +93,7 @@
         background-color: #cc002a;
     }
 
-    .chat-link {
+    .chat-link, .manual-toggle {
         display: inline-block;
         position: relative;
         color: #ff0033;
@@ -101,34 +101,21 @@
         padding: 6px 12px;
         border-radius: 8px;
         transition: background-color 0.3s ease, transform 0.3s ease;
+        background-color: transparent;
+        cursor: pointer;
+        margin-bottom: 6px;
     }
 
-    .chat-link:hover {
+    .chat-link:hover, .manual-toggle:hover {
         background-color: #ff0033;
         color: #fff;
-        transform: translateY(-3px);
-    }
-
-    .chat-link::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: #ff0033;
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-    }
-
-    .chat-link:hover::after {
-        transform: scaleX(1);
     }
 
     .chat-message {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
+        flex-wrap: wrap;
     }
 
     .chat-message.user {
@@ -186,19 +173,6 @@
         transform: scale(1.1);
         box-shadow: 0 0 20px rgba(255, 0, 51, 1);
     }
-
-    .chat-link.selected {
-        background-color: #ff0033;
-        color: #fff;
-        transform: translateY(-3px);
-        animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-        100% { transform: scale(1); }
-    }
     `;
     document.head.appendChild(style);
 
@@ -244,31 +218,38 @@
         { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
     ];
 
-    let manualVisible = false;
+    let manualLinksVisible = false;
+    let manualLinkElements = [];
 
-    function displayLinks() {
-        setTimeout(() => {
-            links.forEach((link, index) => {
+    function toggleManualLinks() {
+        if (manualLinksVisible) {
+            manualLinkElements.forEach(el => el.remove());
+            manualLinkElements = [];
+        } else {
+            links.forEach((link) => {
                 const linkElem = document.createElement('a');
                 linkElem.className = 'chat-link';
                 linkElem.href = link.url;
                 linkElem.target = '_blank';
                 linkElem.textContent = link.label;
-                chatBody.appendChild(linkElem);
 
-                setTimeout(() => {
-                    linkElem.classList.add('visible');
-                }, index * 300);
+                const container = document.createElement('div');
+                container.className = 'chat-message chat';
+                const logo = document.createElement('div');
+                logo.className = 'logo';
+                const content = document.createElement('div');
+                content.className = 'message-content';
+                content.appendChild(linkElem);
+                container.appendChild(logo);
+                container.appendChild(content);
+
+                chatBody.appendChild(container);
+                manualLinkElements.push(container);
             });
-        }, 1000);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        manualLinksVisible = !manualLinksVisible;
     }
-
-    function toggleChat() {
-        chatContainer.classList.toggle('collapsed');
-    }
-
-    icon.addEventListener('click', toggleChat);
-    chatHeader.addEventListener('click', toggleChat);
 
     function sendMessage() {
         const message = chatInput.value.trim();
@@ -288,10 +269,6 @@
             chatBody.appendChild(messageElem);
             chatInput.value = '';
             chatBody.scrollTop = chatBody.scrollHeight;
-
-            setTimeout(() => {
-                messageElem.classList.add('visible');
-            }, 100);
         }
     }
 
@@ -303,7 +280,26 @@
         }
     });
 
-    function addChatResponse(responseText) {
+    icon.addEventListener('click', () => {
+        chatContainer.classList.toggle('collapsed');
+    });
+
+    chatHeader.addEventListener('click', () => {
+        chatContainer.classList.toggle('collapsed');
+    });
+
+    // Mensagem inicial + botão do manual
+    setTimeout(() => {
+        addChatResponse('Olá! Como posso ajudar?', () => {
+            const manualToggle = document.createElement('div');
+            manualToggle.className = 'manual-toggle';
+            manualToggle.textContent = 'Informações do MANUAL GGNET';
+            manualToggle.addEventListener('click', toggleManualLinks);
+            chatBody.appendChild(manualToggle);
+        });
+    }, 1000);
+
+    function addChatResponse(text, callback) {
         const messageElem = document.createElement('div');
         messageElem.className = 'chat-message chat';
 
@@ -313,41 +309,18 @@
 
         const messageContent = document.createElement('div');
         messageContent.className = 'message-content';
-        messageContent.textContent = responseText;
+        messageContent.textContent = text;
         messageElem.appendChild(messageContent);
 
         chatBody.appendChild(messageElem);
-        chatBody.scrollTop = chatBody.scrollHeight;
 
-        setTimeout(() => {
-            messageElem.classList.add('visible');
-        }, 100);
+        if (callback) callback();
+
+        chatBody.scrollTop = chatBody.scrollHeight;
     }
 
-    setTimeout(() => {
-        addChatResponse('Olá! Como posso ajudar?');
-        displayLinks();
-    }, 2000);
-
-    const infoLabel = document.createElement('a');
-    infoLabel.className = 'chat-link';
-    infoLabel.textContent = 'Informações do MANUAL GGNET';
-    chatBody.appendChild(infoLabel);
-
-    infoLabel.addEventListener('click', () => {
-        manualVisible = !manualVisible;
-        if (manualVisible) {
-            infoLabel.classList.add('selected');
-            displayLinks();
-        } else {
-            infoLabel.classList.remove('selected');
-            chatBody.querySelectorAll('.chat-link').forEach(link => link.remove());
-        }
-    });
-
-    // Ícone flutuante arrastável
-    let isDragging = false;
-    let offsetX, offsetY;
+    // Ícone arrastável
+    let isDragging = false, offsetX, offsetY;
 
     icon.addEventListener('mousedown', (e) => {
         isDragging = true;
@@ -368,4 +341,3 @@
         icon.classList.remove('dragging');
     });
 })();
- 
