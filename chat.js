@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chat GGNET com Estilo Refinado e Animações Elegantes (Vermelho Forte)
 // @namespace    http://tampermonkey.net/
-// @version      1.6
+// @version      1.7
 // @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante.
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
@@ -26,9 +26,17 @@
         flex-direction: column;
         z-index: 9999;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-        transform: translateY(100%);
-        transition: transform 0.5s ease;
-        visibility: hidden;
+        overflow: hidden;
+        max-height: 450px;
+        opacity: 1;
+        transform: translateY(0%);
+        transition: max-height 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .chat-container.collapsed {
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(20%);
     }
 
     .chat-header {
@@ -179,7 +187,6 @@
         box-shadow: 0 0 20px rgba(255, 0, 51, 1);
     }
     `;
-
     document.head.appendChild(style);
 
     const chatContainer = document.createElement('div');
@@ -241,15 +248,12 @@
         }, 1000);
     }
 
-    icon.addEventListener('click', () => {
-        if (chatContainer.style.visibility === 'hidden') {
-            chatContainer.style.visibility = 'visible';
-            chatContainer.style.transform = 'translateY(0%)';
-        } else {
-            chatContainer.style.visibility = 'hidden';
-            chatContainer.style.transform = 'translateY(100%)';
-        }
-    });
+    function toggleChat() {
+        chatContainer.classList.toggle('collapsed');
+    }
+
+    icon.addEventListener('click', toggleChat);
+    chatHeader.addEventListener('click', toggleChat);
 
     function sendMessage() {
         const message = chatInput.value.trim();
@@ -277,7 +281,6 @@
     }
 
     chatButton.addEventListener('click', sendMessage);
-
     chatInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
