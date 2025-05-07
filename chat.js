@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Chat GGNET com Estilo Refinado e Animações Elegantes (Vermelho Forte)
 // @namespace    http://tampermonkey.net/
-// @version      1.9
-// @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante.
+// @version      2.0
+// @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante. Agora com respostas da GGNET!
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
 // @grant        none
@@ -227,27 +227,36 @@
         { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
     ];
 
-    let manualLinksVisible = false;
-    let manualLinkElements = [];
+    let manualVisible = false;
 
     function toggleManualLinks() {
-        if (manualLinksVisible) {
-            manualLinkElements.forEach(el => el.remove());
-            manualLinkElements = [];
+        if (manualVisible) {
+            document.querySelectorAll('.chat-message.manual-link').forEach(el => el.remove());
         } else {
-            links.forEach((link) => {
-                const linkElem = document.createElement('a');
-                linkElem.className = 'chat-link';
-                linkElem.href = link.url;
-                linkElem.target = '_blank';
-                linkElem.textContent = link.label;
+            links.forEach(link => {
+                const messageElem = document.createElement('div');
+                messageElem.className = 'chat-message chat manual-link';
 
-                chatBody.appendChild(linkElem);
-                manualLinkElements.push(linkElem);
+                const logo = document.createElement('div');
+                logo.className = 'logo';
+                messageElem.appendChild(logo);
+
+                const content = document.createElement('div');
+                content.className = 'message-content';
+
+                const anchor = document.createElement('a');
+                anchor.href = link.url;
+                anchor.target = '_blank';
+                anchor.textContent = link.label;
+                anchor.className = 'chat-link';
+
+                content.appendChild(anchor);
+                messageElem.appendChild(content);
+                chatBody.appendChild(messageElem);
             });
             chatBody.scrollTop = chatBody.scrollHeight;
         }
-        manualLinksVisible = !manualLinksVisible;
+        manualVisible = !manualVisible;
     }
 
     function sendMessage() {
