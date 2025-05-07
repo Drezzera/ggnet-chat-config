@@ -1,16 +1,20 @@
 // ==UserScript==
-// @name         Chat GGNET com Estilo Refinado e Animações Elegantes (Vermelho Forte)
+// @name         Chat GGNET com comando /cpf para Integrator
 // @namespace    http://tampermonkey.net/
-// @version      1.6
-// @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante.
+// @version      1.7
+// @description  Chat flutuante com comando /cpf funcional no site do Integrator.
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
+// @match        https://integrator6.gegnet.com.br/*
 // @grant        none
 // ==/UserScript==
 
 (function () {
     'use strict';
 
+    const isIntegrator = window.location.href.includes("integrator6.gegnet.com.br");
+
+    // Chat flutuante visível em ambos os sites
     const style = document.createElement('style');
     style.textContent = `
     .chat-container {
@@ -47,8 +51,6 @@
         padding: 12px;
         background-color: #333;
         color: #fff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        transition: opacity 0.3s ease;
     }
 
     .chat-footer {
@@ -78,58 +80,12 @@
         color: #fff;
         cursor: pointer;
         font-weight: bold;
-        transition: background-color 0.3s ease;
-    }
-
-    .chat-button:hover {
-        background-color: #cc002a;
-    }
-
-    .chat-link {
-        display: inline-block;
-        position: relative;
-        color: #ff0033;
-        text-decoration: none;
-        padding: 6px 12px;
-        border-radius: 8px;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .chat-link:hover {
-        background-color: #ff0033;
-        color: #fff;
-        transform: translateY(-3px);
-    }
-
-    .chat-link::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: #ff0033;
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-    }
-
-    .chat-link:hover::after {
-        transform: scaleX(1);
     }
 
     .chat-message {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
-    }
-
-    .chat-message.user {
-        flex-direction: row-reverse;
-        text-align: right;
-    }
-
-    .chat-message.chat {
-        flex-direction: row;
     }
 
     .chat-message .message-content {
@@ -139,18 +95,17 @@
         background-color: #444;
         color: #fff;
         font-size: 14px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     }
 
-    .chat-message .chat .message-content {
+    .chat-message.chat .message-content {
         background-color: #ff0033;
     }
 
-    .chat-message .user .message-content {
+    .chat-message.user .message-content {
         background-color: #555;
     }
 
-    .chat-message .logo {
+    .logo {
         width: 30px;
         height: 30px;
         border-radius: 50%;
@@ -161,7 +116,7 @@
     }
 
     .sidebar-icon {
-        position: absolute;
+        position: fixed;
         bottom: 20px;
         right: 20px;
         width: 50px;
@@ -171,15 +126,8 @@
         border: 4px solid #ff0033;
         box-shadow: 0 0 15px rgba(255, 0, 51, 0.7);
         cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .sidebar-icon:hover {
-        transform: scale(1.1);
-        box-shadow: 0 0 20px rgba(255, 0, 51, 1);
     }
     `;
-
     document.head.appendChild(style);
 
     const chatContainer = document.createElement('div');
@@ -210,36 +158,9 @@
     chatContainer.appendChild(chatFooter);
     document.body.appendChild(chatContainer);
 
-    const icon = document.createElement('img');
-    icon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqYh7CE__-cafXUlORp3ORgLkDSDV941AVXQ&s';
+    const icon = document.createElement('div');
     icon.className = 'sidebar-icon';
     document.body.appendChild(icon);
-
-    const links = [
-        { label: 'Easymesh Huawei + ONT', url: 'https://drive.google.com/file/d/1slPYt5G_yTakT5RAuLMLBWCvMqS-MuGD/view' },
-        { label: 'VINCULAR ONU INT6', url: 'https://drive.google.com/file/d/1xP6hsMN5UuKYV2nPESatr3FfnGogoItu/view' },
-        { label: 'EG8145X6-10', url: 'https://drive.google.com/file/d/1ogs_KfoLWwqMi1Q_pEyBWfn_LAMf-QvN/view' },
-        { label: 'Firmwares DEBUG', url: 'https://sites.google.com/view/csawiki/firmwares/firmwares-debug?authuser=1' },
-        { label: 'Firmwares ONU UNM', url: 'https://drive.google.com/file/d/1DhKRW2RB6IQSlNfqHc7xCWpT8JRIK1Nv/view' },
-        { label: 'Firmwares para ONU Datacom', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
-    ];
-
-    function displayLinks() {
-        setTimeout(() => {
-            links.forEach((link, index) => {
-                const linkElem = document.createElement('a');
-                linkElem.className = 'chat-link';
-                linkElem.href = link.url;
-                linkElem.target = '_blank';
-                linkElem.textContent = link.label;
-                chatBody.appendChild(linkElem);
-
-                setTimeout(() => {
-                    linkElem.classList.add('visible');
-                }, index * 300);
-            });
-        }, 1000);
-    }
 
     icon.addEventListener('click', () => {
         if (chatContainer.style.visibility === 'hidden') {
@@ -251,86 +172,85 @@
         }
     });
 
-    function sendMessage() {
-        const message = chatInput.value.trim();
-        if (message) {
-            const messageElem = document.createElement('div');
-            messageElem.className = 'chat-message user';
-
-            const logo = document.createElement('div');
-            logo.className = 'logo';
-            messageElem.appendChild(logo);
-
-            const messageContent = document.createElement('div');
-            messageContent.className = 'message-content';
-            messageContent.textContent = message;
-            messageElem.appendChild(messageContent);
-
-            chatBody.appendChild(messageElem);
-            chatInput.value = '';
-            chatBody.scrollTop = chatBody.scrollHeight;
-
-            setTimeout(() => {
-                messageElem.classList.add('visible');
-            }, 100);
-        }
-    }
-
-    chatButton.addEventListener('click', sendMessage);
-
-    chatInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-
-    function addChatResponse(responseText) {
-        const messageElem = document.createElement('div');
-        messageElem.className = 'chat-message chat';
+    function addMessage(text, sender = 'user') {
+        const msg = document.createElement('div');
+        msg.className = `chat-message ${sender}`;
 
         const logo = document.createElement('div');
         logo.className = 'logo';
-        messageElem.appendChild(logo);
 
-        const messageContent = document.createElement('div');
-        messageContent.className = 'message-content';
-        messageContent.textContent = responseText;
-        messageElem.appendChild(messageContent);
+        const content = document.createElement('div');
+        content.className = 'message-content';
+        content.textContent = text;
 
-        chatBody.appendChild(messageElem);
+        msg.appendChild(sender === 'chat' ? logo : content);
+        msg.appendChild(sender === 'chat' ? content : logo);
+
+        chatBody.appendChild(msg);
         chatBody.scrollTop = chatBody.scrollHeight;
-
-        setTimeout(() => {
-            messageElem.classList.add('visible');
-        }, 100);
     }
 
-    setTimeout(() => {
-        addChatResponse('Olá! Como posso ajudar?');
-        displayLinks();
-    }, 2000);
+    function processCommand(msg) {
+        if (msg.startsWith('/cpf') && isIntegrator) {
+            const cpf = msg.split(' ')[1]?.trim();
+            if (cpf) {
+                const interval = setInterval(() => {
+                    const input = document.querySelector('input[placeholder="Digite aqui"]') || document.evaluate(
+                        '/html/body/elite-root/elite-home/div/div/div/elite-pesquisa-cliente/div/div[2]/p-card/div/div/div/form/div[1]/div[1]/input',
+                        document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 
-    // Ícone flutuante arrastável
-    let isDragging = false;
-    let offsetX, offsetY;
+                    if (input) {
+                        input.focus();
+                        input.value = cpf;
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
 
-    icon.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        offsetX = e.clientX - icon.getBoundingClientRect().left;
-        offsetY = e.clientY - icon.getBoundingClientRect().top;
-        icon.classList.add('dragging');
-    });
+                        setTimeout(() => {
+                            const keyboardEvent = new KeyboardEvent('keydown', {
+                                bubbles: true,
+                                cancelable: true,
+                                key: 'Enter',
+                                code: 'Enter'
+                            });
+                            input.dispatchEvent(keyboardEvent);
+                        }, 200);
 
-    document.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-            icon.style.left = `${e.clientX - offsetX}px`;
-            icon.style.top = `${e.clientY - offsetY}px`;
+                        addMessage('CPF enviado ao campo de busca!', 'chat');
+                        clearInterval(interval);
+                    }
+                }, 500);
+            } else {
+                addMessage('Você precisa digitar um CPF. Ex: /cpf 12345678900', 'chat');
+            }
+        } else {
+            addMessage('Comando não reconhecido.', 'chat');
+        }
+    }
+
+    function handleSend() {
+        const msg = chatInput.value.trim();
+        if (msg) {
+            addMessage(msg, 'user');
+            chatInput.value = '';
+
+            if (msg.startsWith('/')) {
+                processCommand(msg);
+            } else {
+                setTimeout(() => {
+                    addMessage('Recebido! Em breve adicionaremos respostas automáticas.', 'chat');
+                }, 500);
+            }
+        }
+    }
+
+    chatButton.addEventListener('click', handleSend);
+    chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSend();
         }
     });
 
-    document.addEventListener('mouseup', () => {
-        isDragging = false;
-        icon.classList.remove('dragging');
-    });
+    setTimeout(() => {
+        addMessage('Olá! Envie /cpf 12345678900 para buscar cliente.');
+    }, 1500);
 })();
