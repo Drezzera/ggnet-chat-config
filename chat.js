@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chat GGNET com Estilo Refinado e Animações Elegantes (Vermelho Forte)
 // @namespace    http://tampermonkey.net/
-// @version      1.7
+// @version      1.8
 // @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante.
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
@@ -186,6 +186,19 @@
         transform: scale(1.1);
         box-shadow: 0 0 20px rgba(255, 0, 51, 1);
     }
+
+    .chat-link.selected {
+        background-color: #ff0033;
+        color: #fff;
+        transform: translateY(-3px);
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
     `;
     document.head.appendChild(style);
 
@@ -230,6 +243,8 @@
         { label: 'Atualizar ONU FIBERHOME', url: 'https://drive.google.com/file/d/1DhKRW2RB6IQSlNfqHc7xCWpT8JRIK1Nv/view' },
         { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
     ];
+
+    let manualVisible = false;
 
     function displayLinks() {
         setTimeout(() => {
@@ -309,27 +324,26 @@
         }, 100);
     }
 
-    // Adicionando a label "Informações do MANUAL GGNET"
-    function addManualInfoLabel() {
-        const label = document.createElement('a');
-        label.className = 'chat-link';
-        label.textContent = 'Informações do MANUAL GGNET';
-        label.href = '#';
-        label.addEventListener('click', () => {
-            displayLinks();
-        });
-
-        chatBody.appendChild(label);
-
-        setTimeout(() => {
-            label.classList.add('visible');
-        }, 100);
-    }
-
     setTimeout(() => {
         addChatResponse('Olá! Como posso ajudar?');
-        addManualInfoLabel(); // Adiciona a label "Informações do MANUAL GGNET"
+        displayLinks();
     }, 2000);
+
+    const infoLabel = document.createElement('a');
+    infoLabel.className = 'chat-link';
+    infoLabel.textContent = 'Informações do MANUAL GGNET';
+    chatBody.appendChild(infoLabel);
+
+    infoLabel.addEventListener('click', () => {
+        manualVisible = !manualVisible;
+        if (manualVisible) {
+            infoLabel.classList.add('selected');
+            displayLinks();
+        } else {
+            infoLabel.classList.remove('selected');
+            chatBody.querySelectorAll('.chat-link').forEach(link => link.remove());
+        }
+    });
 
     // Ícone flutuante arrastável
     let isDragging = false;
@@ -354,3 +368,4 @@
         icon.classList.remove('dragging');
     });
 })();
+ 
