@@ -254,6 +254,12 @@
         { label: 'EG8145X6-10 - Configuração Inicial', url: 'https://drive.google.com/file/d/1ogs_KfoLWwqMi1Q_pEyBWfn_LAMf-QvN/view' },
         { label: 'Firmwares DEBUG AX2', url: 'https://sites.google.com/view/csawiki/firmwares/firmwares-debug?authuser=1' },
         { label: 'Atualizar ONU FIBERHOME', url: 'https://drive.google.com/file/d/1DhKRW2RB6IQSlNfqHc7xCWpT8JRIK1Nv/view' },
+        { label: 'Senhas GGNET', url: 'https://sites.google.com/view/csawiki/csa/senhas?authuser=1' },
+        { label: 'IPTV', url: 'https://sites.google.com/view/csawiki/csa/iptv?authuser=1' },
+        { label: 'Motivos de fechamento', url: 'https://drive.google.com/file/d/1mZAHwQngyaCL8YBfL4-FLo3zJzVZD2cS/view' },
+        { label: 'Guia de alarmes - DATACOM', url: 'https://drive.google.com/file/d/1mTLvpjGSh6_qNp7Yqb8LungAnBHS2Ha_/view' },
+        { label: 'Guia de alarmes - Fiberhome', url: 'https://drive.google.com/file/d/1_fmz3M9j9lLqjeiEoS--wXaGJ8Asqkh1/view' },
+        { label: 'SEGMENTAÇÃO CLIENTES', url: 'https://sites.google.com/view/csawiki/segmentação-de-clientes?authuser=1' },
         { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
     ];
 
@@ -276,9 +282,9 @@
 
     // Menu RESOLUÇÃO CSA
     const resolucaoLinks = [
-        { label: 'Sem acesso', url: 'https://docs.google.com/document/d/1xERq2elAMS5-wlgXt6SIGGuqRkG36D0h9cWSQ65mkco/edit?tab=t.0' },
+        { label: 'Sem acesso', url: '#' },
         { label: 'Lentidão', url: '#' },
-        { label: 'Teste', url: '#' },
+        { label: 'Dificuldade específica relacionada a jogos', url: '#' },
         { label: 'Dificuldade com sites específicos', url: 'https://whimsical.com/fluxograma-de-diagnostico-de-acesso-a-um-site-G8QtJAePdtPmNAYuPgGoo3@6HYTAunKLgTTxnn7fK3wjVghhpULiPQQApedioa4d5jJmgT' }
     ];
 
