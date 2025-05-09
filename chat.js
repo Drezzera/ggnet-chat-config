@@ -282,8 +282,8 @@
 
     // Menu RESOLUÇÃO CSA
     const resolucaoLinks = [
-        { label: 'Sem acesso', url: '#' },
-        { label: 'Lentidão', url: '#' },
+        { label: 'Troubleshooting Sem acesso', url: '#' },
+        { label: 'Troubleshooting Lentidão', url: 'https://whimsical.com/fluxograma-lentidao-e-metodos-de-analise-GTf5FLZG7LwwzUP87b6H8V@or4CdLRbgroLeWpGtY5yTKurn2AjoZS7SxFAh4jxP' },
         { label: 'Dificuldade específica relacionada a jogos', url: '#' },
         { label: 'Dificuldade com sites específicos', url: 'https://whimsical.com/fluxograma-de-diagnostico-de-acesso-a-um-site-G8QtJAePdtPmNAYuPgGoo3@6HYTAunKLgTTxnn7fK3wjVghhpULiPQQApedioa4d5jJmgT' }
     ];
