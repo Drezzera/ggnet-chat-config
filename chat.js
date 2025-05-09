@@ -284,7 +284,7 @@
     const resolucaoLinks = [
         { label: 'Troubleshooting Sem acesso', url: '#' },
         { label: 'Troubleshooting Lentidão', url: 'https://whimsical.com/fluxograma-lentidao-e-metodos-de-analise-GTf5FLZG7LwwzUP87b6H8V' },
-        { label: 'Dificuldade específica relacionada a jogos', url: '#' },
+        { label: 'Troubleshooting Avançado de lentidão ', url: 'https://whimsical.com/funcionamento-e-analise-de-roteadores-Jhbu1ZeqDayKoQXP6SjKpH@or4CdLRbgiw8X2Q3sViEA3TH7JGSHy2CW2Vyk9nSy' },
         { label: 'Dificuldade com sites específicos', url: 'https://whimsical.com/fluxograma-de-diagnostico-de-acesso-a-um-site-G8QtJAePdtPmNAYuPgGoo3' }
     ];
 
