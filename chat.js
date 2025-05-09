@@ -279,7 +279,7 @@
         { label: 'Sem acesso', url: 'https://docs.google.com/document/d/1xERq2elAMS5-wlgXt6SIGGuqRkG36D0h9cWSQ65mkco/edit?tab=t.0' },
         { label: 'Lentidão', url: '#' },
         { label: 'Teste', url: '#' },
-        { label: 'Dificuldade com sites específicos', url: '#' }
+        { label: 'Dificuldade com sites específicos', url: 'https://whimsical.com/fluxograma-de-diagnostico-de-acesso-a-um-site-G8QtJAePdtPmNAYuPgGoo3@6HYTAunKLgTTxnn7fK3wjVghhpULiPQQApedioa4d5jJmgT' }
     ];
 
     let resolucaoVisible = false;
