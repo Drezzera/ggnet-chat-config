@@ -12,7 +12,7 @@
     'use strict';
 
     const style = document.createElement('style');
-    style.textContent = `
+    style.textContent = 
     .chat-container {
         position: fixed;
         bottom: 20px;
@@ -182,7 +182,7 @@
         transform: scale(1.1);
         box-shadow: 0 0 20px rgba(255, 0, 51, 1);
     }
-    `;
+    ;
     document.head.appendChild(style);
 
     const chatContainer = document.createElement('div');
