@@ -12,7 +12,7 @@
     'use strict';
 
     const style = document.createElement('style');
-    style.textContent = 
+    style.textContent = `
     .chat-container {
         position: fixed;
         bottom: 20px;
@@ -182,7 +182,7 @@
         transform: scale(1.1);
         box-shadow: 0 0 20px rgba(255, 0, 51, 1);
     }
-    ;
+    `;
     document.head.appendChild(style);
 
     const chatContainer = document.createElement('div');
@@ -323,32 +323,6 @@
             chatBody.appendChild(messageElem);
             chatInput.value = '';
             chatBody.scrollTop = chatBody.scrollHeight;
-
-            if (message.startsWith('/g ')) {
-    const termo = message.substring(3).trim();
-    if (termo) {
-        const responseElem = document.createElement('div');
-        responseElem.className = 'chat-message chat';
-
-        const responseLogo = document.createElement('div');
-        responseLogo.className = 'logo';
-
-        const responseContent = document.createElement('div');
-        responseContent.className = 'message-content';
-        const link = document.createElement('a');
-        link.href = https://www.google.com/search?q=${encodeURIComponent(termo)};
-        link.target = '_blank';
-        link.textContent = Clique aqui para pesquisar "${termo}" no Google;
-        link.className = 'chat-link';
-        responseContent.appendChild(link);
-
-        responseElem.appendChild(responseLogo);
-        responseElem.appendChild(responseContent);
-        chatBody.appendChild(responseElem);
-        chatBody.scrollTop = chatBody.scrollHeight;
-    }
-}
-
         }
     }
 
