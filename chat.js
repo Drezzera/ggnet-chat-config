@@ -181,56 +181,6 @@
     .sidebar-icon:hover {
         transform: scale(1.1);
         box-shadow: 0 0 20px rgba(255, 0, 51, 1);
-
-        .doc-window {
-    position: fixed;
-    top: 100px;
-    left: 100px;
-    width: 300px;
-    height: 250px;
-    background-color: #1a1a1a;
-    color: white;
-    border: 2px solid #ff0033;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.doc-header {
-    background-color: #ff0033;
-    padding: 8px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: move;
-    border-radius: 10px 10px 0 0;
-}
-
-.doc-controls button {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 16px;
-    margin-left: 8px;
-    cursor: pointer;
-}
-
-.doc-window textarea {
-    flex: 1;
-    padding: 10px;
-    background-color: #333;
-    color: white;
-    border: none;
-    resize: none;
-    font-size: 14px;
-    font-family: monospace;
-    outline: none;
-}
-
     }
     `;
     document.head.appendChild(style);
@@ -386,9 +336,9 @@
         const responseContent = document.createElement('div');
         responseContent.className = 'message-content';
         const link = document.createElement('a');
-        link.href = `https://www.google.com/search?q=${encodeURIComponent(termo)}`;
+        link.href = https://www.google.com/search?q=${encodeURIComponent(termo)};
         link.target = '_blank';
-        link.textContent = `Clique aqui para pesquisar "${termo}" no Google`;
+        link.textContent = Clique aqui para pesquisar "${termo}" no Google;
         link.className = 'chat-link';
         responseContent.appendChild(link);
 
@@ -396,59 +346,7 @@
         responseElem.appendChild(responseContent);
         chatBody.appendChild(responseElem);
         chatBody.scrollTop = chatBody.scrollHeight;
-
-        if (message === '/doc') {
-    const docId = `doc-${Date.now()}`;
-    const docWindow = document.createElement('div');
-    docWindow.className = 'doc-window';
-    docWindow.innerHTML = `
-        <div class="doc-header">
-            <span>📝 Documento</span>
-            <div class="doc-controls">
-                <button class="doc-minimize">_</button>
-                <button class="doc-close">×</button>
-            </div>
-        </div>
-        <textarea placeholder="Digite aqui suas anotações..."></textarea>
-    `;
-    document.body.appendChild(docWindow);
-
-    const closeBtn = docWindow.querySelector('.doc-close');
-    const minimizeBtn = docWindow.querySelector('.doc-minimize');
-    const textarea = docWindow.querySelector('textarea');
-
-    closeBtn.addEventListener('click', () => docWindow.remove());
-    minimizeBtn.addEventListener('click', () => {
-        textarea.style.display = textarea.style.display === 'none' ? 'block' : 'none';
-    });
-
-    // Permitir arrastar a janela
-    const header = docWindow.querySelector('.doc-header');
-    let isDraggingDoc = false, startX, startY;
-
-    header.addEventListener('mousedown', (e) => {
-        isDraggingDoc = true;
-        startX = e.clientX - docWindow.offsetLeft;
-        startY = e.clientY - docWindow.offsetTop;
-    });
     }
-}
-
-            
-
-    document.addEventListener('mousemove', (e) => {
-        if (isDraggingDoc) {
-            docWindow.style.left = `${e.clientX - startX}px`;
-            docWindow.style.top = `${e.clientY - startY}px`;
-        }
-    });
-
-    document.addEventListener('mouseup', () => {
-        isDraggingDoc = false;
-    });
-
-    chatInput.value = '';
-    return;
 }
 
         }
@@ -481,8 +379,8 @@
 
     document.addEventListener('mousemove', (e) => {
         if (isDragging) {
-            icon.style.left = `${e.clientX - offsetX}px`;
-            icon.style.top = `${e.clientY - offsetY}px`;
+            icon.style.left = ${e.clientX - offsetX}px;
+            icon.style.top = ${e.clientY - offsetY}px;
         }
     });
 
