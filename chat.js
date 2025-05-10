@@ -5,6 +5,7 @@
 // @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante.
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
+// @match        https://integrator6.gegnet.com.br/#/app*
 // @grant        none
 // ==/UserScript==
 
