@@ -5,7 +5,6 @@
 // @description  Chat flutuante com links interativos, animações suaves e estilo vermelho vibrante.
 // @author       Você
 // @match        https://ggnet.sz.chat/user/agent*
-// @match        https://integrator6.gegnet.com.br*
 // @grant        none
 // ==/UserScript==
 
@@ -261,6 +260,7 @@
         { label: 'Guia de alarmes - DATACOM', url: 'https://drive.google.com/file/d/1mTLvpjGSh6_qNp7Yqb8LungAnBHS2Ha_/view' },
         { label: 'Guia de alarmes - Fiberhome', url: 'https://drive.google.com/file/d/1_fmz3M9j9lLqjeiEoS--wXaGJ8Asqkh1/view' },
         { label: 'SEGMENTAÇÃO CLIENTES', url: 'https://sites.google.com/view/csawiki/segmentação-de-clientes?authuser=1' },
+        { label: 'SKY+ GGNET', url: 'https://sites.google.com/view/csawiki/sky-ggnet' },
         { label: 'Atualizar ONU DATACOM', url: 'https://drive.google.com/file/u/1/d/1MEPjMtT4ilt2C27uFl2-lzQWuwgON4N3/view' }
     ];
 
