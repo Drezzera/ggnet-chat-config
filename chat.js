@@ -396,10 +396,8 @@
         responseElem.appendChild(responseContent);
         chatBody.appendChild(responseElem);
         chatBody.scrollTop = chatBody.scrollHeight;
-    }
-}
 
-            if (message === '/doc') {
+        if (message === '/doc') {
     const docId = `doc-${Date.now()}`;
     const docWindow = document.createElement('div');
     docWindow.className = 'doc-window';
@@ -433,6 +431,10 @@
         startX = e.clientX - docWindow.offsetLeft;
         startY = e.clientY - docWindow.offsetTop;
     });
+    }
+}
+
+            
 
     document.addEventListener('mousemove', (e) => {
         if (isDraggingDoc) {
